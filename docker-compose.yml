@@ -1,0 +1,20 @@
+version: '3.8'  # Versión de Docker Compose
+
+services:
+  jupyter:
+    build: .  # Indica que la imagen se construye desde el Dockerfile en el directorio actual
+    container_name: modelo-predictivo-gpu  # Nombre del contenedor
+    ports:
+      - "8888:8888"  # Mapea el puerto 8888 del contenedor al 8888 del host para Jupyter
+    volumes:
+      - .:/workspace  # Mapea el directorio actual al contenedor para poder acceder a los archivos del proyecto
+    runtime: nvidia  # Usa el runtime de NVIDIA para habilitar el uso de la GPU
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all  # Especifica que se puede usar todas las GPUs disponibles
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility  # Habilita las capacidades necesarias para computación
+    networks:
+      - modelo-net  # Asigna el contenedor a la red 'modelo-net'
+
+networks:
+  modelo-net:  # Define la red 'modelo-net' para la comunicación entre servicios
+    driver: bridge  # El controlador de red 'bridge' es el valor por defecto para redes locales

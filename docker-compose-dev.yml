@@ -1,0 +1,20 @@
+# docker-compose-dev.yml
+
+version: "3.8"
+
+services:
+  modelo-predictivo-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: modelo-predictivo-gpu
+    volumes:
+      - .:/app
+    ports:
+      - "8888:8888"
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
